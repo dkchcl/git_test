@@ -22,7 +22,7 @@ resource "azurerm_resource_group" "RG-02" {
 }
 resource "azurerm_resource_group" "RG-03" {
   name     = "dkc-rg-03"
-  location = "West Europe"
+  location = "central india"
 }
 resource "azurerm_resource_group" "RG-04" {
   name     = "dkc-rg-04"
