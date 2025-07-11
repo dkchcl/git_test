@@ -20,4 +20,12 @@ resource "azurerm_resource_group" "RG-02" {
   name     = "dkc-rg-02"
   location = "West Europe"
 }
+resource "azurerm_resource_group" "RG-03" {
+  name     = "dkc-rg-03"
+  location = "West Europe"
+}
+resource "azurerm_resource_group" "RG-04" {
+  name     = "dkc-rg-04"
+  location = "West Europe"
+}
 
