@@ -8,20 +8,25 @@ on:
 
 jobs:
   terraform:
-    runs-on: NewAction # Windows runner
+    runs-on: NewAction
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Decode azsecret and set env vars (Windows-compatible)
-        shell: pwsh
+      - name: Decode azsecret and set env vars (bash only)
+        shell: bash
         run: |
-          $azSecret = '${{ secrets.azsecret }}' | ConvertFrom-Json
-          echo "ARM_CLIENT_ID=$($azSecret.clientId)" >> $env:GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=$($azSecret.clientSecret)" >> $env:GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=$($azSecret.subscriptionId)" >> $env:GITHUB_ENV
-          echo "ARM_TENANT_ID=$($azSecret.tenantId)" >> $env:GITHUB_ENV
+          echo "${{ secrets.azsecret }}" > az.json
+          export ARM_CLIENT_ID=$(grep -oP '"clientId"\s*:\s*"\K[^"]+' az.json)
+          export ARM_CLIENT_SECRET=$(grep -oP '"clientSecret"\s*:\s*"\K[^"]+' az.json)
+          export ARM_SUBSCRIPTION_ID=$(grep -oP '"subscriptionId"\s*:\s*"\K[^"]+' az.json)
+          export ARM_TENANT_ID=$(grep -oP '"tenantId"\s*:\s*"\K[^"]+' az.json)
+
+          echo "ARM_CLIENT_ID=$ARM_CLIENT_ID" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=$ARM_TENANT_ID" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
