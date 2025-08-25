@@ -57,4 +57,18 @@ jobs:
       - name: DEBUG - Show Terraform Plan Output
         shell: powershell
         run: terraform show -no-color tfplan
+      - name: DEBUG - List all files in working directory
+        shell: powershell
+        run: Get-ChildItem -Recurse | Format-List FullName
+      
+      - name: DEBUG - Print Terraform Version
+        shell: powershell
+        run: terraform version
+      
+      - name: DEBUG - Terraform Plan and Show Output
+        shell: powershell
+        run: |
+          terraform plan -out=tfplan -input=false -no-color
+          terraform show -no-color tfplan
+
 
