@@ -8,20 +8,20 @@ on:
 
 jobs:
   terraform:
-    runs-on: NewAction
+    runs-on: NewAction # Windows runner
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Decode azsecret and set env vars
-        id: azure-secrets
+      - name: Decode azsecret and set env vars (Windows-compatible)
+        shell: pwsh
         run: |
-          echo "${{ secrets.azsecret }}" > az.json
-          echo "ARM_CLIENT_ID=$(jq -r .clientId az.json)" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=$(jq -r .clientSecret az.json)" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=$(jq -r .subscriptionId az.json)" >> $GITHUB_ENV
-          echo "ARM_TENANT_ID=$(jq -r .tenantId az.json)" >> $GITHUB_ENV
+          $azSecret = '${{ secrets.azsecret }}' | ConvertFrom-Json
+          echo "ARM_CLIENT_ID=$($azSecret.clientId)" >> $env:GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=$($azSecret.clientSecret)" >> $env:GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=$($azSecret.subscriptionId)" >> $env:GITHUB_ENV
+          echo "ARM_TENANT_ID=$($azSecret.tenantId)" >> $env:GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
