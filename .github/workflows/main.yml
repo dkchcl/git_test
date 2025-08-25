@@ -40,7 +40,11 @@ jobs:
         shell: powershell
         run: terraform plan -out=tfplan
 
+      - name: Show Terraform Plan Output
+        shell: powershell
+        run: terraform show -no-color tfplan
+
       - name: Terraform Apply (main branch only)
         if: github.ref == 'refs/heads/main'
         shell: powershell
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve tfplan
