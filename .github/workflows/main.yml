@@ -1,18 +1,42 @@
-name: CI
+name: Terraform CI (Azure)
 
 on:
   push:
     branches:
-    - main
-    - feature/*
+      - main
+      - feature/*
 
 jobs:
-  build:
-    runs-on: NewAction 
+  terraform:
+    runs-on: NewAction
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run a one-line script
-        run: echo Hello, world!    
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Decode azsecret and set env vars
+        id: azure-secrets
+        run: |
+          echo "${{ secrets.azsecret }}" > az.json
+          echo "ARM_CLIENT_ID=$(jq -r .clientId az.json)" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=$(jq -r .clientSecret az.json)" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=$(jq -r .subscriptionId az.json)" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=$(jq -r .tenantId az.json)" >> $GITHUB_ENV
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
