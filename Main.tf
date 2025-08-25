@@ -9,7 +9,7 @@ terraform {
     resource_group_name  = "dkcstate-rg"
     storage_account_name = "dkcstorageaccount"
     container_name       = "dkccontainer"
-    key                  = "gitterraform.tfstate"
+    key                  = "git_terraform.tfstate"
   }
 }
 
