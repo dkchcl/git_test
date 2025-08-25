@@ -1,4 +1,4 @@
-name: Terraform CI (Azure)
+name: Terraform CI (Azure - Windows)
 
 on:
   push:
@@ -14,19 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Decode azsecret and set env vars (bash only)
-        shell: bash
+      - name: Decode azsecret and set env vars (Windows PowerShell)
+        shell: powershell
         run: |
-          echo "${{ secrets.azsecret }}" > az.json
-          export ARM_CLIENT_ID=$(grep -oP '"clientId"\s*:\s*"\K[^"]+' az.json)
-          export ARM_CLIENT_SECRET=$(grep -oP '"clientSecret"\s*:\s*"\K[^"]+' az.json)
-          export ARM_SUBSCRIPTION_ID=$(grep -oP '"subscriptionId"\s*:\s*"\K[^"]+' az.json)
-          export ARM_TENANT_ID=$(grep -oP '"tenantId"\s*:\s*"\K[^"]+' az.json)
-
-          echo "ARM_CLIENT_ID=$ARM_CLIENT_ID" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" >> $GITHUB_ENV
-          echo "ARM_TENANT_ID=$ARM_TENANT_ID" >> $GITHUB_ENV
+          $azSecret = ConvertFrom-Json '${{ secrets.azsecret }}'
+          "ARM_CLIENT_ID=$($azSecret.clientId)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "ARM_CLIENT_SECRET=$($azSecret.clientSecret)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "ARM_SUBSCRIPTION_ID=$($azSecret.subscriptionId)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "ARM_TENANT_ID=$($azSecret.tenantId)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -34,14 +29,18 @@ jobs:
           terraform_version: 1.8.0
 
       - name: Terraform Init
+        shell: powershell
         run: terraform init
 
       - name: Terraform Validate
+        shell: powershell
         run: terraform validate
 
       - name: Terraform Plan
+        shell: powershell
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply (main branch only)
         if: github.ref == 'refs/heads/main'
+        shell: powershell
         run: terraform apply -auto-approve tfplan
