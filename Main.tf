@@ -5,11 +5,17 @@ terraform {
       version = "4.25.0"
     }
   }
+ backend "azurerm" {
+    resource_group_name  = "dkcstate-rg"
+    storage_account_name = "dkcstorageaccount"
+    container_name       = "dkccontainer"
+    key                  = "gitterraform.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
-  subscription_id = "b7df65c6-7c4d-4e35-983d-cd66eea0573a"
+  subscription_id = "177b7e12-5f03-4f63-bcd1-ed6d1d776bff"
 }
 resource "azurerm_resource_group" "RG-01" {
   name     = "dkc-rg-01"
