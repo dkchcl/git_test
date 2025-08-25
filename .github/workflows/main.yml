@@ -48,3 +48,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         shell: powershell
         run: terraform apply -auto-approve tfplan
+
+
+      - name: DEBUG - List Terraform Files
+        shell: powershell
+        run: Get-ChildItem -Recurse -Include *.tf
+      
+      - name: DEBUG - Show Terraform Plan Output
+        shell: powershell
+        run: terraform show -no-color tfplan
+
