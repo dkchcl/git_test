@@ -46,6 +46,7 @@ jobs:
       - name: Terraform Plan
         run: terraform.exe plan
         working-directory: ${{ env.WORKDIR }}
+        
 
 
       - name: Terraform Apply
