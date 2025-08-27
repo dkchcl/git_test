@@ -19,10 +19,6 @@ jobs:
         with:
           creds: ${{ secrets.ROCKEYSECRET }}
 
-      - name: Check pwsh availability
-        run: where pwsh
-        shell: cmd
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
