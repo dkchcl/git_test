@@ -12,6 +12,11 @@ jobs:
       WORKDIR: ${{ github.workspace }}
 
     steps:
+      - name: Add Terraform to PATH
+        shell: powershell
+        run: |
+          echo "D:\Path\To\Terraform" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+   
       - name: Checkout Repo
         uses: actions/checkout@v4
 
