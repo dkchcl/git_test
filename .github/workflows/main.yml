@@ -40,7 +40,7 @@ jobs:
         working-directory: ${{ env.WORKDIR }}
 
       - name: Terraform Format
-        run: terraform.exe fmt -check -recursive
+        run: terraform fmt -recursive
         working-directory: ${{ env.WORKDIR }}
 
       - name: Terraform Plan
