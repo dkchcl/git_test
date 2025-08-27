@@ -6,7 +6,7 @@ on:
 
 jobs:
   terraform:
-    runs-on: [self-hosted, Windows, X64, dev01]  # Make sure this matches your runner
+    runs-on: [self-hosted, Windows, X64, dev01]  # Make sure tags match your runner
 
     env:
       WORKDIR: ${{ github.workspace }}
@@ -28,7 +28,7 @@ jobs:
       - name: Terraform Init
         shell: powershell
         run: |
-          terraform.exe init `
+          terraform init `
             -backend-config="storage_account_name=dkcstorageaccount" `
             -backend-config="container_name=dkccontainer" `
             -backend-config="key=dkc.tfstate" `
@@ -37,17 +37,22 @@ jobs:
         working-directory: ${{ env.WORKDIR }}
 
       - name: Terraform Validate
-        run: terraform.exe validate
+        shell: powershell
+        run: terraform validate
         working-directory: ${{ env.WORKDIR }}
 
       - name: Terraform Format
-        run: terraform.exe fmt -recursive
+        shell: powershell
+        run: terraform fmt -recursive
         working-directory: ${{ env.WORKDIR }}
 
       - name: Terraform Plan
-        run: terraform.exe plan
+        shell: powershell
+        run: terraform plan
         working-directory: ${{ env.WORKDIR }}
         
       - name: Terraform Apply
-        run: terraform.exe apply -auto-approve
+        if: github.ref == 'refs/heads/main'
+        shell: powershell
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKDIR }}
