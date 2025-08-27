@@ -24,11 +24,8 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Setup PowerShell
-        uses: actions/setup-powershell@v1
-  
       - name: Terraform Init
-        shell: pwsh
+        shell: powershell
         run: |
           terraform.exe init `
             -backend-config="storage_account_name=dkcstorageaccount" `
