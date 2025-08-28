@@ -1,14 +1,14 @@
 module "rg" {
   source              = "../Modules/resource_group"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
 }
 
 module "virtual_network" {
   depends_on           = [module.rg]
   source               = "../Modules/virtual_network"
   resource_group_name  = "dkc-rg-01"
-  location             = "central india"
+  location             = "West Europe"
   virtual_network_name = "todovnet"
   address_space        = ["10.0.0.0/16"]
 }
@@ -36,7 +36,7 @@ module "nsg" {
   source              = "../Modules/network_security_group"
   nsg_name            = "todonsg"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
 }
 
 module "f_pip" {
@@ -44,7 +44,7 @@ module "f_pip" {
   source              = "../Modules/Public_ip"
   public_ip           = "frontend_pip"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
 }
 
 module "b_pip" {
@@ -52,7 +52,7 @@ module "b_pip" {
   source              = "../Modules/Public_ip"
   public_ip           = "backend_pip"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
 }
 
 module "nic1" {
@@ -60,7 +60,7 @@ module "nic1" {
   source               = "../Modules/nic"
   nic_name             = "nic1"
   resource_group_name  = "dkc-rg-01"
-  location             = "central india"
+  location             = "West Europe"
   virtual_network_name = "todovnet"
   ip_config            = "testconfig"
   subnet               = "subnet1"
@@ -72,7 +72,7 @@ module "nic2" {
   source               = "../Modules/nic"
   nic_name             = "nic2"
   resource_group_name  = "dkc-rg-01"
-  location             = "central india"
+  location             = "West Europe"
   virtual_network_name = "todovnet"
   ip_config            = "testconfig"
   subnet               = "subnet2"
@@ -83,7 +83,7 @@ module "key_vault" {
   depends_on          = [module.rg]
   source              = "../Modules/key_vault"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
   kv_name             = "todovault234"
 }
 
@@ -113,7 +113,7 @@ module "sql_server_name" {
   depends_on          = [module.rg, module.key_vault_secret1]
   source              = "../Modules/sql_server"
   resource_group_name = "dkc-rg-01"
-  location            = "central india"
+  location            = "West Europe"
   sql_server_name     = "todovmssqlserver1"
   key_vault           = "todovault234"
   username            = "sqlusername"
@@ -132,7 +132,7 @@ module "vm" {
   depends_on           = [module.rg, module.nic1, module.key_vault_secret]
   source               = "../Modules/Virtual_machine"
   resource_group_name  = "dkc-rg-01"
-  location             = "central india"
+  location             = "West Europe"
   nic_name             = "nic1"
   vm_name              = "frontendvm"
   size                 = "Standard_D2_v3"
@@ -150,7 +150,7 @@ module "vm1" {
   depends_on           = [module.rg, module.nic2, module.key_vault_secret]
   source               = "../Modules/Virtual_machine"
   resource_group_name  = "dkc-rg-01"
-  location             = "central india"
+  location             = "West Europe"
   nic_name             = "nic2"
   vm_name              = "backendvm"
   size                 = "Standard_D2_v3"
