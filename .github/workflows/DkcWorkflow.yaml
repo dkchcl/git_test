@@ -15,6 +15,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - name: Show workspace path
+        run: echo "Workspace is ${{ github.workspace }}"
+        
       - name: Login to Azure
         uses: azure/login@v1
         with:
