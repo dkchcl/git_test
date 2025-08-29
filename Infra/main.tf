@@ -113,7 +113,7 @@ module "sql_server_name" {
   depends_on          = [module.rg, module.key_vault_secret1]
   source              = "../Modules/sql_server"
   resource_group_name = "dkc-rg-01"
-  location            = "East US"
+  location            = "Central India"
   sql_server_name     = "todovmssqlserver1"
   key_vault           = "todovault234"
   username            = "sqlusername"
