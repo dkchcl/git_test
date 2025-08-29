@@ -55,4 +55,3 @@ jobs:
       - name: Terraform Apply
         run: terraform.exe apply -auto-approve
         working-directory: ${{ env.WORKDIR }}
-
