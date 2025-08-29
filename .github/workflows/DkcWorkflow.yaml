@@ -56,7 +56,7 @@ jobs:
         run: terraform.exe apply -auto-approve
         working-directory: ${{ env.WORKDIR }}
 
-      # - name: Terraform Destroy
-      #   run: terraform.exe destroy -auto-approve
-      #   working-directory: ${{ env.WORKDIR }}  
+      - name: Terraform Destroy
+        run: terraform.exe destroy -auto-approve
+        working-directory: ${{ env.WORKDIR }}  
 
