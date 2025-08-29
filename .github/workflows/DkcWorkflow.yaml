@@ -4,7 +4,7 @@ on:
     branches:
       - main
       - feature/*
-
+      
 jobs:
   AzureInfra:
     runs-on: [self-hosted, Windows, X64, supper]  # Make sure this matches your runner
